@@ -1,0 +1,126 @@
+---
+title: "Salarios Avance"
+author: "Roel De la Rosa - A01197595"
+date: "22/8/2022"
+output: html_document
+---
+1.
+```{r}
+library(ggplot2)
+library(reshape2)
+library(psych)
+library(Hmisc)
+library(clusterSim)
+library(factoextra)
+```
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+M = read.csv('ds_salaries.csv')
+head(M)
+#View((M))
+```
+C.
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+dim(M)
+message("Las columnas son:")
+colnames(M)
+```
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+sapply(M, class)
+```
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+message("El promedio del salario en dolares es: " ,mean(M$salary_in_usd))
+message("La desviación estándar del salario en dolares es: ",sd(M$salary_in_usd))
+message("La mediana del salario en dolares es: ",median(M$salary_in_usd))
+```
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+hist(M$salary_in_usd)
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+boxplot(M$salary_in_usd, horizontal = TRUE)
+```
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+pie(table(M$employee_residence))
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+barplot(table(M$company_location))
+
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+pie(table(M$company_size))
+```
+
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+pie(table(M$job_title))
+```
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+pie(table(M$remote_ratio))
+```
+
+Lo que se quiere predecir es "salary_in_usd"
+Las variables a utilzar son:
+"experience_level", "employment_type", "employee_residence" "remote_ratio", "company_location" y "company_size" 
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+df = M[, c("experience_level","work_year" , "employment_type", "employee_residence", "remote_ratio", "company_location", "company_size","salary_in_usd")]
+head(df)
+```
+
+```{r}
+aggregate(df[,8], list(df$work_year), mean)
+```
+
+Observamos que en el 2020 el salario promedio es 95813, en 2021 es 99853 y en 2022 es de 124522, por lo que, hasta ahora, parece que si han incrementado. Tomar en cuenta que fuera año y mes pudiera ayudar
+
+```{r}
+aggregate(df[,8], list(df$employment_type), mean)
+```
+```{r}
+aggregate(df[,8], list(df$experience_level), mean)
+```
+
+```{r}
+aggregate(df[,8], list(df$company_location), mean)
+```
+```{r}
+hist(df$salary_in_usd)
+```
+```{r}
+shapiro.test(df$salary_in_usd)
+```
+Dado que el pvalue es menor a 0.05 se asume que no es normal
+
+Preguntas que quiero responder:
+
+
+1. ¿Se han incrementado los salarios a lo largo del tiempo?
+
+2. ¿Qué tipo de contrato ofrece mejores salarios? ¿Qué tipo de contrato es el más conveniente?
+
+3. ¿Qué tipo de distribución creo que Salarios en USD sigue? ¿Es posible comprobar que sigue la distribución que creemos?
+
+
